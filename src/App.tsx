@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from "react";
+import { fetchPokemon } from "./services/pokemanServices";
+import type { Pokemon } from "./types/types.card";
+import Header from "./components/Header";
+import { CardGrid } from "./components/CardGrid";
+
+const App: React.FC = () => {
+  const CARD_COUNT = 12;
+  const [pokemon, setPokemon] = useState<Pokemon[]>([]);
+  const [clickedIds, setClickedIds] = useState<number[]>([]);
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
+  // Added "won" to the status type
+  const [status, setStatus] = useState<"loading" | "playing" | "error" | "won">(
+    "loading"
+  );
+
+  // Single useEffect for mounting
+  useEffect(() => {
+    const loadGame = async () => {
+      try {
+        setStatus("loading");
+        const data = await fetchPokemon(CARD_COUNT);
+        setPokemon(data);
+        setStatus("playing");
+      } catch (err) {
+        console.error(err);
+        setStatus("error");
+      }
+    };
+    loadGame();
+  }, []); // Only runs once on mount
+
+  const handleCardClick = (id: number) => {
+    if (status !== "playing") return;
+
+    if (clickedIds.includes(id)) {
+      setScore(0);
+      setClickedIds([]);
+      // Optional: Add a shake effect or "Game Over" toast here
+    } else {
+      const newScore = score + 1;
+      const newClicked = [...clickedIds, id];
+
+      setScore(newScore);
+      setClickedIds(newClicked);
+
+      if (newScore > bestScore) setBestScore(newScore);
+
+      if (newClicked.length === CARD_COUNT) {
+        setStatus("won");
+        return;
+      }
+    }
+    // Shuffle logic
+    setPokemon((prev) => [...prev].sort(() => Math.random() - 0.5));
+  };
+
+  const restartGame = () => {
+    setScore(0);
+    setClickedIds([]);
+    setStatus("playing");
+    setPokemon((prev) => [...prev].sort(() => Math.random() - 0.5));
+  };
+
+  // Conditional Rendering
+  if (status === "loading") {
+    return (
+      <div className="loader-container">
+        <div className="spinner"></div>
+        <p>Catching 'em all...</p>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return <div className="error">Failed to load Pokemon. Please refresh.</div>;
+  }
+
+  return (
+    <div className="app">
+      <header className="game-header">
+        <div className="logo-section">
+          <h1>PokéMemory</h1>
+          <p>Don't click the same Pokémon twice!</p>
+        </div>
+        <div className="scoreboard">
+          <div className="score-badge">
+            <span>Score</span>
+            <strong>{score}</strong>
+          </div>
+          <div className="score-badge">
+            <span>Best</span>
+            <strong>{bestScore}</strong>
+          </div>
+        </div>
+      </header>
+
+      <main className="card-grid">
+        {pokemon.map((poke) => (
+          <div
+            key={poke.id}
+            className="card"
+            onClick={() => handleCardClick(poke.id)}
+          >
+            <img src={poke.image} alt={poke.name} />
+            <h3>{poke.name}</h3>
+          </div>
+        ))}
+      </main>
+    </div>
+  );
+};
+
+export default App;
