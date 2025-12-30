@@ -1,73 +1,44 @@
-# React + TypeScript + Vite
+# 📝 PokéMemory - Memory Card Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**PokéMemory** is a high-performance memory game built with React and TypeScript. The challenge is simple: click on every Pokémon card exactly once. If you click the same card twice, your score resets.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- **Real-time Data**: Fetches high-quality sprites and data from the [PokéAPI](https://pokeapi.co/).
+- **Persistent High Score**: Tracks your `Current Score` and maintains your `Best Score` across sessions.
+- **Shuffle Logic**: Uses a Fisher-Yates inspired shuffle to reorder cards after every click.
+- **Type Safety**: Fully typed with TypeScript to ensure predictable data structures.
+- **Axios Interceptors**: Implements a custom Axios client to handle base URLs and global error catching.
+- **Responsive UI**: A modern, dark-themed grid layout optimized for all screen sizes.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Core**: React 18
+- **Language**: TypeScript
+- **State Management**: React Hooks (`useState`, `useEffect`)
+- **HTTP Client**: Axios (Instance + Interceptors)
+- **Styling**: CSS3 (Grid & Flexbox)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📂 Folder Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+├── components/
+│   ├── Header.tsx      # Layout & Title
+│   ├── Scoreboard.tsx  # Score logic
+│   ├── CardGrid.tsx    # Responsive grid
+│   └── Card.tsx        # Individual card logic
+├── services/
+│   ├── apiClient.ts    # Axios configuration
+│   └── pokemonService.ts # API logic
+├── types/
+│   └── types.card.ts   # TS Interfaces
+├── App.tsx             # Game state manager
+└── index.css           # Global theme & animations
 ```
