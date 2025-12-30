@@ -79,35 +79,23 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <header className="game-header">
-        <div className="logo-section">
-          <h1>PokéMemory</h1>
-          <p>Don't click the same Pokémon twice!</p>
-        </div>
-        <div className="scoreboard">
-          <div className="score-badge">
-            <span>Score</span>
-            <strong>{score}</strong>
-          </div>
-          <div className="score-badge">
-            <span>Best</span>
-            <strong>{bestScore}</strong>
-          </div>
-        </div>
-      </header>
+      <Header currentScore={score} bestScore={bestScore} />
 
-      <main className="card-grid">
-        {pokemon.map((poke) => (
-          <div
-            key={poke.id}
-            className="card"
-            onClick={() => handleCardClick(poke.id)}
-          >
-            <img src={poke.image} alt={poke.name} />
-            <h3>{poke.name}</h3>
-          </div>
-        ))}
+      <main>
+        <CardGrid cards={pokemon} onCardClick={handleCardClick} />
       </main>
+
+      {status === "won" && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>🏆 Master Memory!</h2>
+            <p>You caught all {CARD_COUNT} Pokémon!</p>
+            <button onClick={restartGame} className="restart-btn">
+              Play Again
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

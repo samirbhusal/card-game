@@ -1,31 +1,37 @@
 .game-header {
-  width: 100%;
-  max-width: 1200px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-  border-bottom: 2px solid #333;
-  padding-bottom: 20px;
+  flex-direction: column; /* Stacks title and scores vertically */
+  align-items: center; /* Centers items horizontally */
+  justify-content: center; /* Centers items vertically within the header */
+  gap: 1.5rem; /* Adds space between the title and scoreboard */
+  padding: 2rem 1rem;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.logo-section {
+  text-align: center; /* Ensures text inside the logo section is centered */
 }
 
 .logo-section h1 {
-  font-size: 2.5rem;
-  color: #ffcb05; /* Pokemon Yellow */
-  text-shadow: 2px 2px #3d7dca; /* Pokemon Blue */
   margin: 0;
+  font-size: 3rem;
+  /* Keep your blue/yellow styling */
 }
 
 .scoreboard {
   display: flex;
-  gap: 20px;
+  justify-content: center; /* Centers the badges */
+  gap: 2rem;
+  width: 100%;
+  max-width: 600px;
 }
 
 .score-badge {
-  background: #1e1e1e;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid #444;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers labels over the numbers */
   text-align: center;
 }
 
@@ -40,44 +46,90 @@
   color: #4ecca3; /* Success Green */
 }
 
+/* 1. The Grid */
 .card-grid {
   display: grid;
-  /* This creates as many columns as fit, at least 200px wide */
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 25px;
-  width: 100%;
-  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 3rem;
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.card {
-  background: #1a1a1a;
-  border-radius: 15px;
-  padding: 15px;
+/* 2. The 3D Container */
+.card-container {
+  perspective: 1000px;
+  height: 250px; /* Essential: This stops them from overlapping vertically */
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
+  width: 100%;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+/* 3. The Faces */
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  background: #1e1e1e;
+  border: 2px solid #333;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
-.card:hover {
-  transform: translateY(-10px);
-  border-color: #ffcb05;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-}
-
-.card img {
+/* 4. The Image Fix */
+.card-front img {
   width: 100%;
-  height: auto;
-  max-width: 150px; /* Keep them consistent */
+  height: 150px; /* Constrains the Pokemon image size */
   object-fit: contain;
 }
 
-.card h3 {
-  margin-top: 15px;
-  font-size: 1.1rem;
+.card-front h3 {
+  font-size: 1.2rem; /* Make it slightly larger */
+  font-weight: 700;
+  letter-spacing: 0.5px;
   text-transform: capitalize;
-  letter-spacing: 1px;
-  color: white;
+  color: #ffcb05;
+  margin-top: 15px;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(45deg, #ff0000, #cc0000);
+}
+
+.card-container:hover .card-inner {
+  transform: translateY(-8px); /* Lifts the card up */
+  transition: transform 0.3s ease;
+}
+
+.card-front {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card-container:hover .card-front {
+  border-color: #ffcb05; /* Highlights the border when you hover */
+  box-shadow: 0 8px 25px rgba(255, 203, 5, 0.2);
+}
+
+@media (min-width: 1024px) {
+  .game-header {
+    /* Optional: switch back to row but stay centered in the middle of the screen */
+    flex-direction: row;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
