@@ -25,3 +25,9 @@ export interface PokemonDetailResponse {
     };
   };
 }
+
+export interface GameStatusProps {
+  status: "loading" | "playing" | "error" | "won";
+  score: number;
+  onRestart: () => void;
+}

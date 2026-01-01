@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Activity } from "react";
 import { fetchPokemon } from "./services/pokemanServices";
 import type { Pokemon } from "./types/types.card";
 import Header from "./components/Header";
 import { CardGrid } from "./components/CardGrid";
+import GameStatus from "./components/GameStatus";
 
 const App: React.FC = () => {
   const CARD_COUNT = 12;
@@ -10,7 +11,6 @@ const App: React.FC = () => {
   const [clickedIds, setClickedIds] = useState<number[]>([]);
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
-  // Added "won" to the status type
   const [status, setStatus] = useState<"loading" | "playing" | "error" | "won">(
     "loading"
   );
@@ -85,17 +85,9 @@ const App: React.FC = () => {
         <CardGrid cards={pokemon} onCardClick={handleCardClick} />
       </main>
 
-      {status === "won" && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>🏆 Master Memory!</h2>
-            <p>You caught all {CARD_COUNT} Pokémon!</p>
-            <button onClick={restartGame} className="restart-btn">
-              Play Again
-            </button>
-          </div>
-        </div>
-      )}
+      <Activity mode={status === "won" ? "visible" : "hidden"}>
+        <GameStatus status={status} score={score} onRestart={restartGame} />
+      </Activity>
     </div>
   );
 };
